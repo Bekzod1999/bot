@@ -23,6 +23,24 @@ def sendPhotoDog(acceptChatId, acceptPhotoUrl, acceptText, TOKEN):
         'text': acceptText 
     }
     r = requests.post(f'https://api.telegram.org/bot{TOKEN}/sendPhoto', data=data)
+
+def sendButton(chat_id, TOKEN):
+    button = {'text': 'DOG'}
+    button2 = {'text': 'CAT'}
+
+    keyboard = [
+        [button, button2]
+    ]
+
+    reply_markup = {'keyboard': keyboard, 'resize': True}
+
+    data = {
+        'chat_id': chat_id,
+        'reply_markup': reply_markup
+    }
+    requests.get(f'https://api.telegram.org/bot{TOKEN}/sendMessage', json=data)
+
+
 newChatId = -1
 
 while True:
@@ -30,65 +48,11 @@ while True:
     whileGetUpdates, whileGetDogPhotoUrl, whileGetCatPhotoUrl = whileUpdates
     whileGetInfo = getInfo(whileGetUpdates, whileGetDogPhotoUrl, whileGetCatPhotoUrl, TOKEN)
     whileSendChatId, whileSendPhotoDogUrl, whileSendPhotoCatUrl, whileSendText, whileGetMessageId, whileToken = whileGetInfo
+    sendButton(whileSendChatId, whileToken)
     
-    if whileSendText == 'DOG' and (newChatId != whileGetMessageId):
+    if (whileSendText == 'DOG' or whileSendText == 'dog') and (newChatId != whileGetMessageId):
         sendPhotoDog(whileSendChatId, whileSendPhotoDogUrl, whileSendText, whileToken)
         newChatId = whileGetMessageId
-    elif newChatId != whileGetMessageId:
+    elif (whileSendText == 'CAT' or whileSendText == 'cat') and newChatId != whileGetMessageId:
         sendPhotoDog(whileSendChatId, whileSendPhotoCatUrl, whileSendText, whileToken)
         newChatId = whileGetMessageId
-
-    
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # sendP = requests.post(f'https://api.telegram.org/bot{TOKEN}/sendPhotoDog')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# updates = requests.get(f'https://api.telegram.org/bot{TOKEN}/getUpdates').json()
-# getUpdatesPhotos = requests.get(f'https://random.dog/woof.json').json()
-# print(updates, getUpdatesPhotos['url'])
-    
-
-
