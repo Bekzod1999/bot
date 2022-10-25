@@ -128,16 +128,17 @@ def sendPhotoDogAndCat(getChatId, acceptPhotoUrl, getText, TOKEN):
     }
     r = requests.post(f'https://api.telegram.org/bot{TOKEN}/sendPhoto', data=data)
 
-def sendButton(getChatId, TOKEN):
-    button = {'text': 'DOG'}
-    button2 = {'text': 'CAT'}
+def sendButton(getChatId, textData, TOKEN):
+    button = {'text': '🐶DOG'}
+    button2 = {'text': '😹CAT'}
 
     keyboard = [
         [button, button2]
     ]
-    reply_markup = {'keyboard': keyboard, 'resize_keyboard': True}
+    reply_markup = {'keyboard': keyboard, 'resize_keyboard':    True}
     data = {
         'chat_id': getChatId,
+        'text': textData,
         'reply_markup': reply_markup
     }
     requests.get(f'https://api.telegram.org/bot{TOKEN}/sendMessage', json=data)
@@ -149,11 +150,13 @@ while True:
     wUp, getDogUrlPhoto, getCatUrlPhoto = updates
     whileGetInfo = getInfo(wUp, getDogUrlPhoto, getCatUrlPhoto, TOKEN)
     getChatId, wGetDogUrlPhoto, wGetCatUrlPhoto, getText, getMessageId, wToken = whileGetInfo
-    sendButton(getChatId, wToken)
     
-    if (getText == 'DOG' or getText == 'dog') and (newChatId != getMessageId):
+    
+    if (getText == '🐶DOG' or getText == 'dog') and (newChatId != getMessageId):
         sendPhotoDogAndCat(getChatId, wGetDogUrlPhoto, getText, wToken)
+        sendButton(getChatId, 'That is dog', wToken)
         newChatId = getMessageId
-    elif (getText == 'CAT' or getText == 'cat') and newChatId != getMessageId:
+    elif (getText == '😹CAT' or getText == 'cat') and newChatId != getMessageId:
         sendPhotoDogAndCat(getChatId, wGetCatUrlPhoto, getText, wToken)
+        sendButton(getChatId, 'That is cat', wToken)
         newChatId = getMessageId
